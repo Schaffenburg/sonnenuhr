@@ -9,6 +9,9 @@ const float inMin = 0.99;
 const float inMax = 2.9;
 const float outMin = 0.0;
 const float outMax = 15.0;
+
+const float idxCoeff = 1.0567;
+const float idxOffset = -2.358;
  
 const byte numberOfReadings = 8;
  
@@ -34,11 +37,13 @@ float mapfloat(float x, float in_min, float in_max, float out_min, float out_max
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-void loop(){
+void measure() {
   digitalWrite(LED, HIGH);
+  digitalWrite(ENABLE, HIGH);
   int uvLevel = averageAnalogRead(UVSENSOR);
   int refLevel = averageAnalogRead(REF_3V3);
   digitalWrite(LED, LOW);
+  digitalWrite(ENABLE, LOW);
 
   float refVoltage = 3.3 * refLevel/1024;
   float outputVoltage = 3.3 / refLevel * uvLevel;
@@ -51,6 +56,16 @@ void loop(){
  
   Serial.print(" UV Intensität: ");
   Serial.print(uvIntensity);
-  Serial.println(" mW/cm^2");
-  delay(200);
+  Serial.print(" mW/cm² ≙ UV Index:");
+  float uvindex = (idxCoeff * uvIntensity) + idxOffset;
+  if (uvindex < 0)
+    uvindex = 0.0;
+  else if (uvindex > 11)
+    uvindex = 11.0;
+  Serial.println((int)uvindex);
+}
+
+void loop() {
+  measure();
+  enter_sleep();
 }
