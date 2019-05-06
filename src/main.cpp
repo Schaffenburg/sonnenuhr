@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include <avr/sleep.h>
+#include <avr/power.h>
 
 #define UVSENSOR A0
 #define REF_3V3 A1
@@ -15,12 +17,31 @@ const float idxOffset = -2.358;
  
 const byte numberOfReadings = 8;
  
+ISR(TIMER1_OVF_vect)
+{
+  /* Timer1 Interrupt Service Routine */
+}
+
+//Timer_1 initialisieren
+void init_timer ()
+{
+  /* konfiguriere Timer */
+  TCCR1A = 0x00;  // normal operation
+  TCCR1B = 0;
+  TCNT1  = 3036;  // preload counter
+  TCCR1B |= (1 << CS12) | (1 << CS10);  // prescaler: 1024
+  TIMSK1 |= (1 << TOIE1);  // enable interrupt on timer
+}
+
 void setup(){
   pinMode(UVSENSOR, INPUT);
   pinMode(REF_3V3, INPUT);
   pinMode(LED, OUTPUT);
   pinMode(ENABLE, OUTPUT);
   Serial.begin(9600);
+
+  init_timer ();
+
   Serial.println("Sonnenuhr Start");
 }
  
@@ -63,6 +84,27 @@ void measure() {
   else if (uvindex > 11)
     uvindex = 11.0;
   Serial.println((int)uvindex);
+}
+
+void enter_sleep(void)
+{
+  delay (100); // wait for UART
+  set_sleep_mode(SLEEP_MODE_IDLE);
+  sleep_enable();
+
+  /* AVR müde, AVR schlafen */
+  power_adc_disable();
+  power_spi_disable();
+  power_timer0_disable();
+  power_timer2_disable();
+  power_twi_disable();
+
+  TCNT1 = 3036;
+  sleep_cpu();
+
+  // sleep_mode();
+  sleep_disable();
+  power_all_enable();
 }
 
 void loop() {
