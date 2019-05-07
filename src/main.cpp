@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
+#include <Stepper.h>
 
 #define UVSENSOR A0
 #define REF_3V3 A1
@@ -16,11 +17,21 @@ const float idxCoeff = 1.0567;
 const float idxOffset = -2.358;
  
 const byte numberOfReadings = 8;
+
+volatile long lastPos = 0;
+
+// Hauttyp 3 Eigenschutzzeit bei UV 8 = 30 min
+// baseTime in s bei UV 1 (Hauttyp 3)
+const int baseTime = 14400;
+
+const int stepsMax = 200;
  
 ISR(TIMER1_OVF_vect)
 {
   /* Timer1 Interrupt Service Routine */
 }
+
+Stepper clockStepper(stepsMax, 8, 9, 10, 11);
 
 //Timer_1 initialisieren
 void init_timer ()
@@ -58,32 +69,29 @@ float mapfloat(float x, float in_min, float in_max, float out_min, float out_max
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-void measure() {
-  digitalWrite(LED, HIGH);
-  digitalWrite(ENABLE, HIGH);
-  int uvLevel = averageAnalogRead(UVSENSOR);
-  int refLevel = averageAnalogRead(REF_3V3);
-  digitalWrite(LED, LOW);
-  digitalWrite(ENABLE, LOW);
+void set_clock(int seconds)
+{
+  int h,m,rest;
+  h = seconds/3600;
+  rest = seconds - h*3600;
+  m = rest/60;
+  rest -= m*60;
 
-  float refVoltage = 3.3 * refLevel/1024;
-  float outputVoltage = 3.3 / refLevel * uvLevel;
-  Serial.print(" Ref Voltage: ");
-  Serial.print(refVoltage);
-  Serial.print(" Sensor Voltage: ");
-  Serial.print(outputVoltage);
-  
-  float uvIntensity = mapfloat(outputVoltage, inMin, inMax, outMin, outMax);
- 
-  Serial.print(" UV Intensität: ");
-  Serial.print(uvIntensity);
-  Serial.print(" mW/cm² ≙ UV Index:");
-  float uvindex = (idxCoeff * uvIntensity) + idxOffset;
-  if (uvindex < 0)
-    uvindex = 0.0;
-  else if (uvindex > 11)
-    uvindex = 11.0;
-  Serial.println((int)uvindex);
+  Serial.print(" Max.Exp.dauer: ");
+  Serial.print(seconds);
+  Serial.print(" Sekunden ≙ ");
+  Serial.print(h);
+  Serial.print(":");
+  Serial.print(m);
+  Serial.print(":");
+  Serial.print(rest);
+  long steps = (long) seconds * ((float) stepsMax / 60.0);
+  Serial.print(" Turning stepper by ");
+  Serial.print(steps);
+  Serial.print("-");
+  Serial.print(lastPos);
+  clockStepper.step(steps);
+  lastPos = steps;
 }
 
 void enter_sleep(void)
@@ -105,6 +113,41 @@ void enter_sleep(void)
   // sleep_mode();
   sleep_disable();
   power_all_enable();
+}
+
+void measure() {
+  digitalWrite(LED, HIGH);
+  digitalWrite(ENABLE, HIGH);
+  int uvLevel = averageAnalogRead(UVSENSOR);
+  int refLevel = averageAnalogRead(REF_3V3);
+  digitalWrite(LED, LOW);
+  digitalWrite(ENABLE, LOW);
+
+  float refVoltage = 3.3 * refLevel/1024;
+  float outputVoltage = 3.3 / refLevel * uvLevel;
+  Serial.print(" Ref Voltage: ");
+  Serial.print(refVoltage);
+  Serial.print(" Sensor Voltage: ");
+  Serial.print(outputVoltage);
+  
+  float uvIntensity = mapfloat(outputVoltage, inMin, inMax, outMin, outMax);
+ 
+  Serial.print(" UV Intensität: ");
+  Serial.print(uvIntensity);
+  Serial.print(" mW/cm² ≙ UV Index:");
+  float uvindex = (idxCoeff * uvIntensity) + idxOffset;
+  float maxtime = baseTime;
+
+  if (uvindex <= 0.0)
+    uvindex = 0.0;
+  else if (uvindex > 11)
+      uvindex = 11.0;
+
+  if (uvindex >= 1.0)
+    maxtime = baseTime / uvindex;
+
+  Serial.print((int)uvindex);
+  set_clock(maxtime);
 }
 
 void loop() {
