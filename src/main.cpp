@@ -16,7 +16,7 @@ const float outMax = 15.0;
 const float idxCoeff = 1.0567;
 const float idxOffset = -2.358;
 
-const byte numberOfReadings = 8;
+const byte numberOfReadings = 16;
 
 volatile long lastPos = 0;
 
@@ -204,6 +204,9 @@ void adjust()
       do_display ^= true;
       Serial.print(" toggle UV display: ");
       Serial.println(do_display ? "enabled" : "disabled");
+    case '4':
+      Serial.print(" init 4 hour position ");
+      lastPos = 4*60*STEPS_PER_REV;
     default:
       break;
   }
@@ -222,6 +225,7 @@ void adjust()
     }
   } else if (steps) {
       Serial.print(" step ");
+
       Serial.println(steps);
       clockStepper.step(steps);
   }
