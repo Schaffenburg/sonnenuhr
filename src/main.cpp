@@ -15,7 +15,7 @@ const float outMax = 15.0;
 
 const float idxCoeff = 1.0567;
 const float idxOffset = -2.358;
- 
+
 const byte numberOfReadings = 8;
 
 volatile long lastPos = 0;
@@ -24,14 +24,18 @@ volatile long lastPos = 0;
 // baseTime in s bei UV 1 (Hauttyp 3)
 const int baseTime = 14400;
 
-const int stepsMax = 200;
- 
+const int STEPS_PER_REV = 24;
+
 ISR(TIMER1_OVF_vect)
 {
   /* Timer1 Interrupt Service Routine */
 }
 
-Stepper clockStepper(stepsMax, 8, 9, 10, 11);
+Stepper clockStepper(STEPS_PER_REV, 8, 10, 9, 11);
+int speed;
+bool continuous;
+bool do_display;
+int steps;
 
 //Timer_1 initialisieren
 void init_timer ()
@@ -51,20 +55,24 @@ void setup(){
   pinMode(ENABLE, OUTPUT);
   Serial.begin(9600);
 
+  speed = 30;
+  continuous = false;
+  do_display = false;
+
   init_timer ();
 
   Serial.println("Sonnenuhr Start");
 }
- 
+
 int averageAnalogRead(int pinToRead){
-  unsigned int runningValue = 0; 
+  unsigned int runningValue = 0;
   for(int x = 0 ; x < numberOfReadings ; x++){
     unsigned int val = analogRead(pinToRead);
     runningValue += val;
-  } 
-  return(runningValue / numberOfReadings);  
+  }
+  return(runningValue / numberOfReadings);
 }
- 
+
 float mapfloat(float x, float in_min, float in_max, float out_min, float out_max){
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
@@ -85,13 +93,16 @@ void set_clock(int seconds)
   Serial.print(m);
   Serial.print(":");
   Serial.print(rest);
-  long steps = (long) seconds * ((float) stepsMax / 60.0);
+  long steps = (long) seconds * ((float) STEPS_PER_REV / 60.0);
   Serial.print(" Turning stepper by ");
   Serial.print(steps);
   Serial.print("-");
-  Serial.print(lastPos);
-  clockStepper.step(steps);
-  lastPos = steps;
+  Serial.println(lastPos);
+
+  if (do_display) {
+    clockStepper.step(steps-lastPos);
+    lastPos = steps;
+  }
 }
 
 void enter_sleep(void)
@@ -129,9 +140,9 @@ void measure() {
   Serial.print(refVoltage);
   Serial.print(" Sensor Voltage: ");
   Serial.print(outputVoltage);
-  
+
   float uvIntensity = mapfloat(outputVoltage, inMin, inMax, outMin, outMax);
- 
+
   Serial.print(" UV Intensität: ");
   Serial.print(uvIntensity);
   Serial.print(" mW/cm² ≙ UV Index:");
@@ -150,7 +161,76 @@ void measure() {
   set_clock(maxtime);
 }
 
+void adjust()
+{
+  steps = 0;
+  int incomingByte = Serial.read();
+  Serial.print(incomingByte);
+  Serial.flush();
+  switch (incomingByte)
+  {
+    case '+':
+      speed++;
+      Serial.print(" increase speed to ");
+      Serial.println(speed);
+      break;
+    case '-':
+      speed--;
+      Serial.print(" decrease speed to ");
+      Serial.println(speed);
+      break;
+    case ' ':
+      steps = 1;
+      break;
+    case 's':
+      continuous = false;
+      Serial.println(" disable contiuous revolution ");
+      break;
+    case 'c':
+      continuous = true;
+      Serial.println(" enble contiuous revolution ");
+      break;
+    case 'm':
+      steps = STEPS_PER_REV;
+      break;
+    case 'h':
+      steps = STEPS_PER_REV * 60;
+      break;
+    case 'i':
+      speed *= -1;
+      Serial.println(" inverse direction ");
+      break;
+    case 'u':
+      do_display ^= true;
+      Serial.print(" toggle UV display: ");
+      Serial.println(do_display ? "enabled" : "disabled");
+    default:
+      break;
+  }
+  if (speed > 0) {
+    clockStepper.setSpeed(speed*10);
+  } else if (speed < 0) {
+    clockStepper.setSpeed(speed*-10);
+    steps *= -1;
+  }
+
+  if (continuous) {
+    if (speed > 0) {
+      clockStepper.step(1);
+    } else if (speed < 0) {
+      clockStepper.step(-1);
+    }
+  } else if (steps) {
+      Serial.print(" step ");
+      Serial.println(steps);
+      clockStepper.step(steps);
+  }
+}
+
 void loop() {
+  while (Serial.available() > 0) {
+    adjust();
+  }
   measure();
   enter_sleep();
 }
