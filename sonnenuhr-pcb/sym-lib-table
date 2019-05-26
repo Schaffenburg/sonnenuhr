@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name sonnenuhr)(type Legacy)(uri ${KIPRJMOD}/sonnenuhr.lib)(options "")(descr ""))
+)
