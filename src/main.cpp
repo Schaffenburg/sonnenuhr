@@ -11,6 +11,8 @@
 #define M2 6
 #define M3 7
 #define M4 8
+#define POTI_VCC 9
+#define POTI_SENS A3
 
 const float inMin = 0.99;
 const float inMax = 2.9;
@@ -66,6 +68,8 @@ void setup(){
   pinMode(REF_3V3, INPUT);
   pinMode(LED, OUTPUT);
   pinMode(ENABLE, OUTPUT);
+  pinMode(POTI_VCC, OUTPUT);
+  pinMode(POTI_SENS, INPUT);
   Serial.begin(9600);
 
   speed = 30;
@@ -176,7 +180,51 @@ void measure() {
   set_clock(maxtime);
 }
 
-void adjust()
+#define ADC_MAX 1024
+#define ADC_CENTER ADC_MAX/2
+
+void adjust_poti() {
+  Serial.print(" poti val ");
+  Serial.println(poti);
+  int timeouts = 0;
+  while (timeouts < 100) {
+    digitalWrite(POTI_VCC, HIGH);
+    poti = analogRead(A3);
+    int _speed = (ADC_CENTER - poti);
+    Serial.print(" speed ");
+    Serial.print(_speed);
+    Serial.print(" -> ");
+    if (poti > ADC_CENTER - 10 && poti < ADC_CENTER + 10) {
+      timeouts++;
+      Serial.print(" timeout ");
+      Serial.println(timeouts);
+      delayMicroseconds(1000);
+    } else {
+      timeouts = 0;
+      if (_speed > 0) {
+        clockStepper.setSpeed(_speed*1.6);
+        Serial.println((int)(_speed*1.6));
+        if (_speed > 500)
+          clockStepper.step(60);
+        else if (_speed > 100)
+          clockStepper.step(10);
+        else
+          clockStepper.step(1);
+      } else if (_speed < 0) {
+        clockStepper.setSpeed(_speed*-1.6);
+        if (_speed < -500)
+          clockStepper.step(-60);
+        else if (_speed < -100)
+          clockStepper.step(-10);
+        else
+          clockStepper.step(-1);
+      }
+    }
+  }
+  digitalWrite(POTI_VCC, LOW);
+}
+
+void adjust_serial()
 {
   steps = 0;
   int incomingByte = Serial.read();
@@ -232,13 +280,7 @@ void adjust()
     steps *= -1;
   }
 
-  if (continuous) {
-    if (speed > 0) {
-      clockStepper.step(1);
-    } else if (speed < 0) {
-      clockStepper.step(-1);
-    }
-  } else if (steps) {
+  if (steps) {
       Serial.print(" step ");
 
       Serial.println(steps);
@@ -248,8 +290,16 @@ void adjust()
 
 void loop() {
   while (Serial.available() > 0) {
-    adjust();
+    adjust_serial();
   }
+  if (continuous) {
+    if (speed > 0) {
+      clockStepper.step(1);
+    } else if (speed < 0) {
+      clockStepper.step(-1);
+    }
+  }
+  adjust_poti();
   measure();
   enter_sleep();
 }

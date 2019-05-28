@@ -1,6 +1,6 @@
 {
     "terminal.integrated.env.linux": {
-        "PATH": "/home/fraxinas/.platformio/penv/bin:/home/fraxinas/.platformio/penv:/usr/local/sbin:/usr/bin:/usr/local/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/fraxinas/projects",
+        "PATH": "/home/fraxinas/.platformio/penv/bin:/home/fraxinas/.platformio/penv:/usr/lib/ccache/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/var/lib/flatpak/exports/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/fraxinas/projects:/home/fraxinas/.local/bin:/bin",
         "PLATFORMIO_CALLER": "vscode"
     }
 }
