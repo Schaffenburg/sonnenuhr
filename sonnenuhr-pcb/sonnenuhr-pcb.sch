@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:sonnenuhr-pcb-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -38,12 +39,12 @@ $EndComp
 $Comp
 L Motor:Stepper_Motor_unipolar_5pin #M1
 U 1 1 5CEAAF02
-P 8000 4000
-F 0 "#M1" H 7922 3767 50  0000 C CNN
-F 1 "Stepper_Motor_unipolar_5pin" H 7922 3676 50  0000 C CNN
-F 2 "" H 8010 3990 50  0001 C CNN
-F 3 "http://www.infineon.com/dgdl/Application-Note-TLE8110EE_driving_UniPolarStepperMotor_V1.1.pdf?fileId=db3a30431be39b97011be5d0aa0a00b0" H 8010 3990 50  0001 C CNN
-	1    8000 4000
+P 7950 4100
+F 0 "#M1" H 7872 3867 50  0000 C CNN
+F 1 "Stepper_Motor_unipolar_5pin" H 7872 3776 50  0000 C CNN
+F 2 "" H 7960 4090 50  0001 C CNN
+F 3 "http://www.infineon.com/dgdl/Application-Note-TLE8110EE_driving_UniPolarStepperMotor_V1.1.pdf?fileId=db3a30431be39b97011be5d0aa0a00b0" H 7960 4090 50  0001 C CNN
+	1    7950 4100
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -71,12 +72,12 @@ $EndComp
 $Comp
 L Connector:Conn_01x05_Female #J4
 U 1 1 5CEAD4BD
-P 7200 3900
-F 0 "#J4" H 7092 4285 50  0000 C CNN
-F 1 "Conn_01x05_Female" H 7092 4194 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" H 7200 3900 50  0001 C CNN
-F 3 "~" H 7200 3900 50  0001 C CNN
-	1    7200 3900
+P 7150 4000
+F 0 "#J4" H 7042 4385 50  0000 C CNN
+F 1 "Conn_01x05_Female" H 7042 4294 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" H 7150 4000 50  0001 C CNN
+F 3 "~" H 7150 4000 50  0001 C CNN
+	1    7150 4000
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
@@ -115,79 +116,53 @@ F 3 "" H 6650 3150 50  0001 C CNN
 	1    6650 3150
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7800 3700 7400 3700
-Wire Wire Line
-	7900 3700 7900 3650
-Wire Wire Line
-	7900 3650 7650 3650
-Wire Wire Line
-	7650 3650 7650 3800
-Wire Wire Line
-	7650 3800 7400 3800
-Wire Wire Line
-	8100 3700 8100 3600
-Wire Wire Line
-	8100 3600 7550 3600
-Wire Wire Line
-	7550 3600 7550 3900
-Wire Wire Line
-	7550 3900 7400 3900
-Wire Wire Line
-	7700 3900 7650 3900
-Wire Wire Line
-	7650 3900 7650 4000
-Wire Wire Line
-	7650 4000 7400 4000
-Wire Wire Line
-	7700 4100 7400 4100
 $Comp
 L sonnenuhr:GYML8511 #U2
 U 1 1 5CF0EBF5
-P 7700 1650
-F 0 "#U2" H 7950 1815 50  0000 C CNN
-F 1 "GYML8511" H 7950 1724 50  0000 C CNN
-F 2 "sonnenuhr-pcb:GYML8511" H 7700 1650 50  0001 C CNN
-F 3 "" H 7700 1650 50  0001 C CNN
-	1    7700 1650
+P 7700 1500
+F 0 "#U2" H 7950 1665 50  0000 C CNN
+F 1 "GYML8511" H 7950 1574 50  0000 C CNN
+F 2 "sonnenuhr-pcb:GYML8511" H 7700 1500 50  0001 C CNN
+F 3 "" H 7700 1500 50  0001 C CNN
+	1    7700 1500
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:Conn_01x05_Female #J3
 U 1 1 5CF0FF59
-P 7200 1950
-F 0 "#J3" H 7092 2335 50  0000 C CNN
-F 1 "Conn_01x05_Female" H 7092 2244 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" H 7200 1950 50  0001 C CNN
-F 3 "~" H 7200 1950 50  0001 C CNN
-	1    7200 1950
+P 7200 1800
+F 0 "#J3" H 7092 2185 50  0000 C CNN
+F 1 "Conn_01x05_Female" H 7092 2094 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" H 7200 1800 50  0001 C CNN
+F 3 "~" H 7200 1800 50  0001 C CNN
+	1    7200 1800
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	7400 1750 7800 1750
+	7400 1600 7800 1600
 Wire Wire Line
-	7400 1850 7800 1850
+	7400 1700 7800 1700
 Wire Wire Line
-	7400 1950 7800 1950
+	7400 1800 7800 1800
 Wire Wire Line
-	7400 2050 7800 2050
+	7400 1900 7800 1900
 Wire Wire Line
-	7400 2150 7800 2150
+	7400 2000 7800 2000
 $Comp
 L Connector:Conn_01x05_Male J1
 U 1 1 5CED387B
-P 6900 1950
-F 0 "J1" V 6962 2194 50  0000 L CNN
-F 1 "Conn_01x05_Male" V 7053 2194 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal" H 6900 1950 50  0001 C CNN
-F 3 "~" H 6900 1950 50  0001 C CNN
-	1    6900 1950
+P 6900 1800
+F 0 "J1" V 6962 2044 50  0000 L CNN
+F 1 "Conn_01x05_Male" V 7053 2044 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal" H 6900 1800 50  0001 C CNN
+F 3 "~" H 6900 1800 50  0001 C CNN
+	1    6900 1800
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	6700 1850 3400 1850
+	6700 1700 3400 1700
 Wire Wire Line
-	3400 1850 3400 1500
+	3400 1700 3400 1500
 $Comp
 L power:+3V3 #PWR0105
 U 1 1 5CF1C18D
@@ -200,11 +175,11 @@ F 3 "" H 3400 1500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6700 1950 4700 1950
+	6700 1800 4700 1800
 Wire Wire Line
-	6700 2150 5050 2150
+	6700 2000 5050 2000
 Wire Wire Line
-	5050 2150 5050 3700
+	5050 2000 5050 3600
 Wire Wire Line
 	4300 3050 4700 3050
 Wire Wire Line
@@ -212,7 +187,7 @@ Wire Wire Line
 Wire Wire Line
 	4700 2950 4700 3050
 Wire Wire Line
-	4700 1950 4700 2950
+	4700 1800 4700 2500
 Connection ~ 4700 2950
 Wire Wire Line
 	4700 3050 4700 4950
@@ -225,12 +200,12 @@ Wire Wire Line
 	4700 4950 4700 5200
 Connection ~ 4700 4950
 Wire Wire Line
-	6700 2050 3500 2050
+	6700 1900 3500 1900
 Wire Wire Line
-	3500 2050 3500 2550
-Connection ~ 3400 1850
+	3500 1900 3500 2550
+Connection ~ 3400 1700
 Wire Wire Line
-	3400 1850 3400 2550
+	3400 1700 3400 2550
 Wire Wire Line
 	1900 1500 1900 2950
 Wire Wire Line
@@ -281,11 +256,146 @@ Wire Wire Line
 Wire Wire Line
 	3500 3800 5350 3800
 Wire Wire Line
-	3700 3700 3700 3550
+	3700 3600 3700 3550
 Wire Wire Line
-	3700 3700 5050 3700
-Text Label 6700 2050 0    50   ~ 0
+	3700 3600 5050 3600
+Text Label 6700 1900 0    50   ~ 0
 UVMeasure
-Text Label 6700 2150 0    50   ~ 0
+Text Label 6700 2000 0    50   ~ 0
 SensorEnable
+Wire Wire Line
+	7350 4200 7500 4200
+Wire Wire Line
+	7500 4200 7500 3800
+Wire Wire Line
+	7500 3800 7750 3800
+Wire Wire Line
+	7350 3900 7450 3900
+Wire Wire Line
+	7450 3900 7450 3750
+Wire Wire Line
+	7450 3750 7850 3750
+Wire Wire Line
+	7850 3750 7850 3800
+Wire Wire Line
+	7350 3800 7350 3700
+Wire Wire Line
+	7350 3700 8050 3700
+Wire Wire Line
+	8050 3700 8050 3800
+Wire Wire Line
+	7350 4000 7650 4000
+Wire Wire Line
+	7350 4100 7650 4100
+Wire Wire Line
+	7650 4100 7650 4200
+$Comp
+L Device:CP C2
+U 1 1 5CEED029
+P 6650 4800
+F 0 "C2" H 6768 4891 50  0000 L CNN
+F 1 "100uF" H 6768 4800 50  0000 L CNN
+F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm" H 6768 4709 50  0000 L CNN
+F 3 "~" H 6650 4800 50  0001 C CNN
+	1    6650 4800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6650 4200 6650 4650
+Connection ~ 6650 4200
+Wire Wire Line
+	6650 4650 6450 4650
+Connection ~ 6650 4650
+Wire Wire Line
+	6650 4950 6450 4950
+Connection ~ 5750 4950
+Connection ~ 6450 4950
+Wire Wire Line
+	6450 4950 5750 4950
+$Comp
+L Device:C C1
+U 1 1 5CEED474
+P 6450 4800
+F 0 "C1" H 6150 4900 50  0000 L CNN
+F 1 "100nF" H 6100 4800 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 5800 4600 50  0000 L CNN
+F 3 "~" H 6450 4800 50  0001 C CNN
+	1    6450 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Solar_Cells #SC1
+U 1 1 5CEFF7B1
+P 1150 1150
+F 0 "#SC1" H 963 1196 50  0000 R CNN
+F 1 "Solar_Cells" H 963 1105 50  0000 R CNN
+F 2 "" V 1150 1210 50  0001 C CNN
+F 3 "~" V 1150 1210 50  0001 C CNN
+	1    1150 1150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_POT #RV1
+U 1 1 5CF06F42
+P 7850 2400
+F 0 "#RV1" H 7780 2354 50  0000 R CNN
+F 1 "R22k" H 7780 2445 50  0000 R CNN
+F 2 "" H 7850 2400 50  0001 C CNN
+F 3 "~" H 7850 2400 50  0001 C CNN
+	1    7850 2400
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x03_Female #J1
+U 1 1 5CF0AE95
+P 7200 2400
+F 0 "#J1" H 7092 2593 50  0000 C CNN
+F 1 "Conn_01x03_Female" H 7092 2684 50  0000 C CNN
+F 2 "" H 7200 2400 50  0001 C CNN
+F 3 "~" H 7200 2400 50  0001 C CNN
+	1    7200 2400
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x03_Male J3
+U 1 1 5CF0BB94
+P 6900 2400
+F 0 "J3" H 6872 2332 50  0000 R CNN
+F 1 "Conn_01x03_Male" H 6872 2423 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 6900 2400 50  0001 C CNN
+F 3 "~" H 6900 2400 50  0001 C CNN
+	1    6900 2400
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	7400 2300 7550 2300
+Wire Wire Line
+	7550 2300 7550 2250
+Wire Wire Line
+	7550 2250 7850 2250
+Wire Wire Line
+	7400 2400 7700 2400
+Wire Wire Line
+	7400 2500 7550 2500
+Wire Wire Line
+	7550 2500 7550 2550
+Wire Wire Line
+	7550 2550 7850 2550
+Wire Wire Line
+	3600 3550 3600 3700
+Wire Wire Line
+	3600 3700 5200 3700
+Wire Wire Line
+	5200 3700 5200 2300
+Wire Wire Line
+	5200 2300 6700 2300
+Wire Wire Line
+	6700 2400 3600 2400
+Wire Wire Line
+	3600 2400 3600 2550
+Wire Wire Line
+	6700 2500 4700 2500
+Connection ~ 4700 2500
+Wire Wire Line
+	4700 2500 4700 2950
 $EndSCHEMATC
