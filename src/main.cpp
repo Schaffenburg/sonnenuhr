@@ -149,7 +149,7 @@ void measure() {
   digitalWrite(LED, LOW);
   digitalWrite(ENABLE, LOW);
 
-  float refVoltage = 3.3 * refLevel/1024;
+  float refVoltage = 5.0 * refLevel/1024;
   float outputVoltage = 3.3 / refLevel * uvLevel;
   Serial.print(" Ref Voltage: ");
   Serial.print(refVoltage);
