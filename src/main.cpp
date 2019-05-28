@@ -7,6 +7,10 @@
 #define REF_3V3 A1
 #define ENABLE 12
 #define LED 13
+#define M1 5
+#define M2 6
+#define M3 7
+#define M4 8
 
 const float inMin = 0.99;
 const float inMax = 2.9;
@@ -26,12 +30,14 @@ const int baseTime = 14400;
 
 const int STEPS_PER_REV = 24;
 
+volatile int poti = 0;
+
 ISR(TIMER1_OVF_vect)
 {
   /* Timer1 Interrupt Service Routine */
 }
 
-Stepper clockStepper(STEPS_PER_REV, 8, 10, 9, 11);
+Stepper clockStepper(STEPS_PER_REV, M1, M2, M3, M4);
 int speed;
 bool continuous;
 bool do_display;
@@ -46,6 +52,13 @@ void init_timer ()
   TCNT1  = 3036;  // preload counter
   TCCR1B |= (1 << CS12) | (1 << CS10);  // prescaler: 1024
   TIMSK1 |= (1 << TOIE1);  // enable interrupt on timer
+}
+
+void stepper_disable() {
+  digitalWrite(M1, LOW);
+  digitalWrite(M2, LOW);
+  digitalWrite(M3, LOW);
+  digitalWrite(M4, LOW);
 }
 
 void setup(){
@@ -117,6 +130,7 @@ void enter_sleep(void)
   power_timer0_disable();
   power_timer2_disable();
   power_twi_disable();
+  stepper_disable();
 
   TCNT1 = 3036;
   sleep_cpu();
@@ -124,6 +138,7 @@ void enter_sleep(void)
   // sleep_mode();
   sleep_disable();
   power_all_enable();
+
 }
 
 void measure() {
